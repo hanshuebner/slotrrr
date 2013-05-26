@@ -7,8 +7,8 @@ var time = "";
 var zeroCharCode = '0'.charCodeAt(0);
 
 function driverIndex(mask) {
-    for (var index = 0;; mask >>= 1, index++) {
-        if (mask & 0x10) {
+    for (var index = 0; ; mask <<= 1, index++) {
+        if (mask & 0x80) {
             return index;
         }
     }
