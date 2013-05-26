@@ -1,0 +1,19 @@
+{
+    "name": "ds-030-logger",
+    "version": "0.0.0",
+    "description": "Race logger for DS-030",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "serialport2": "*",
+        "socket.io": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hanshuebner/ds-030-logger"
+    },
+    "author": "Hans Hübner",
+    "license": "BSD"
+}
