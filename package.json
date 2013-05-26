@@ -8,7 +8,9 @@
     },
     "dependencies": {
         "serialport2": "*",
-        "socket.io": "*"
+        "socket.io": "*",
+        "express": "*",
+        "express-notemplate": "*"
     },
     "repository": {
         "type": "git",
