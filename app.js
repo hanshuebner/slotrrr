@@ -12,8 +12,10 @@ var deviceName = '/dev/cu.usbserial-FTCAAI6X';
 var timeRemaining = 0;
 var time = "";
 var zeroCharCode = '0'.charCodeAt(0);
+var timeMessage = { type: 'time' };
+var laps = [0, 0, 0, 0];
 
-function driverIndex(mask) {
+function trackIndex(mask) {
     for (var index = 0; ; mask <<= 1, index++) {
         if (mask & 0x80) {
             return index;
@@ -31,34 +33,42 @@ function processByte(byte) {
         timeRemaining--;
         if (timeRemaining == 0) {
             console.log('time: ', time);
+            timeMessage.time = parseFloat(time);
+            timeMessage.laps = ++laps[timeMessage.track];
+            sendMessage(timeMessage);
+            timeMessage = { type: 'time' };
         }
     } else {
         switch(byte) {
         case 0x80: case 0x40: case 0x20: case 0x10:
             time = '';
             timeRemaining = 3;
-            console.log('time for ', driverIndex(byte));
+            console.log('time for ', trackIndex(byte));
+            timeMessage.track = trackIndex(byte);
             break;
         case 0xa0:
-            console.log('ready');
+            sendMessage({ type: 'ready' });
             break;
         case 0xa1:
-            console.log('set');
+            sendMessage({ type: 'set' });
             break;
         case 0xa2:
-            console.log('go');
+            sendMessage({ type: 'go' });
+            laps = [0, 0, 0, 0];
             break;
         case 0xa3:
-            console.log('pause');
+            sendMessage({ type: 'pause' });
             break;
         case 0xa4:
-            console.log('end of race');
+            sendMessage({ type: 'raceEnded' });
             break;
         case 0xa5:
-            console.log('race aborted');
+            sendMessage({ type: 'raceAborted' });
             break;
         case 0xa7:
             console.log('bestzeit');
+            timeMessage.isBestLap = true;
+            break;
         case 0xb3:
             break;
         default:
@@ -110,13 +120,24 @@ app.configure('development', function() {
 
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+var clients = [];
 
+io.set('log level', 1);
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+    socket.on('disconnect', function () {
+        console.log('client', socket, 'disconnected');
+        clients.splice(clients.indexOf(socket), 1);
+    });
+    socket.emit('message', { type: 'hello' });
+    clients.push(socket);
 });
+
+function sendMessage(message) {
+    console.log('sending', message, 'to', clients.length, 'clients');
+    clients.forEach(function (socket) {
+        socket.emit('message', message);
+    });
+}
 
 app.get('/', function (req, res) {
     res.redirect('/slotmania.html');
