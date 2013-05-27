@@ -38,13 +38,8 @@
     top: 0.5em;
 }
 
-.driver-card .name-label {
-    left: 13em;
-    top: 1em;
-}
-
 .driver-card .name {
-    left: 5.3em;
+    left: 0.7em;
     top: 0.5em;
 }
 
@@ -68,12 +63,12 @@
     top: 1.7em;
 }
 
-.driver-card .fastest-lap-label {
+.driver-card .best-lap-label {
     left: 1em;
     top: 9em;
 }
 
-.driver-card .fastest-lap {
+.driver-card .best-lap {
     left: 0.4em;
     top: 4.7em;
 }

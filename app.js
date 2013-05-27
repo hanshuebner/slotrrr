@@ -32,11 +32,13 @@ function processByte(byte) {
         }
         timeRemaining--;
         if (timeRemaining == 0) {
+            timeMessage.lap = ++laps[timeMessage.track];
             console.log('time: ', time);
-            timeMessage.time = parseFloat(time);
-            timeMessage.laps = ++laps[timeMessage.track];
+            if (!time.match(/>>/)) {                        // first lap has no time
+                timeMessage.time = parseFloat(time);
+            }
             sendMessage(timeMessage);
-            timeMessage = { type: 'time' };
+            timeMessage = { type: 'lap' };
         }
     } else {
         switch(byte) {

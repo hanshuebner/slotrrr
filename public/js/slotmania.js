@@ -13,9 +13,6 @@ app.directive('trackStatus', function () {
 
 function SlotmaniaController($scope) {
     var socket = io.connect('http://localhost');
-    socket.on('message', function (data) {
-        console.log('message', data);
-    });
     $scope.track = [ { number: 1,
                        driverName: "Henrik" },
                      { number: 2,
@@ -24,5 +21,17 @@ function SlotmaniaController($scope) {
                        driverName: "Patrick" },
                      { number: 4,
                        driverName: "Andreas" } ];
+    socket.on('message', function (data) {
+        console.log('message', data);
+        if (data.type == 'lap') {
+            var track = $scope.track[data.track];
+            track.lap = data.lap;
+            track.lastLap = data.time;
+            if (!track.bestLap || data.isBestLap) {
+                track.bestLap = data.time;
+            }
+        }
+        $scope.$apply();
+    });
 }
 SlotmaniaController.$inject = ['$scope'];
