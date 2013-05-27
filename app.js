@@ -74,7 +74,7 @@ port.on('data', function(data) {
 });
 
 port.on('error', function(err) {
-    throw err;
+    console.log('serial port error:', err);
 });
 
 port.open(deviceName, {
@@ -116,7 +116,11 @@ io.sockets.on('connection', function (socket) {
   socket.on('my other event', function (data) {
     console.log(data);
   });
-})
+});
+
+app.get('/', function (req, res) {
+    res.redirect('/slotmania.html');
+});
 
 server.listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));
