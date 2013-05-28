@@ -11,16 +11,20 @@ app.directive('trackStatus', function () {
     }
 });
 
+app.filter('lapTime', function () {
+    return function (time) {
+        if (time) {
+            return time + "s";
+        }
+    }
+});
+
 function SlotmaniaController($scope) {
     var socket = io.connect('http://localhost');
-    $scope.track = [ { number: 1,
-                       driverName: "Henrik" },
-                     { number: 2,
-                       driverName: "Olaf" },
-                     { number: 3,
-                       driverName: "Patrick" },
-                     { number: 4,
-                       driverName: "Andreas" } ];
+    socket.on('race', function (data) {
+        $scope.track = data.race;
+        $scope.nextRace = data.nextRace;
+    });
     socket.on('message', function (data) {
         console.log('message', data);
         if (data.type == 'lap') {

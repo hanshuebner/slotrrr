@@ -5,6 +5,7 @@ var util = require('util');
 var http = require('http');
 var express = require('express');
 var notemplate = require('express-notemplate');
+var pg = require('pg');
 var SerialPort = require('serialport2').SerialPort;
 var port = new SerialPort();
 
@@ -127,7 +128,7 @@ var clients = [];
 io.set('log level', 1);
 io.sockets.on('connection', function (socket) {
     socket.on('disconnect', function () {
-        console.log('client', socket, 'disconnected');
+        console.log('client disconnected');
         clients.splice(clients.indexOf(socket), 1);
     });
     socket.emit('message', { type: 'hello' });
@@ -148,3 +149,17 @@ app.get('/', function (req, res) {
 server.listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));
 });
+
+function makeRaces(drivers) {
+    var races = [];
+    for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
+        var race = [];
+        for (var track = 0; track < 4; track++) {
+            race.push({ trackNumber: track, driverName: drivers[(raceNumber + track) % drivers.length] });
+        }
+        races.push(race);
+    }
+    return races;
+}
+
+console.log('races', makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']));

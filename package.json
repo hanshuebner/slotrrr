@@ -10,7 +10,8 @@
         "serialport2": "*",
         "socket.io": "*",
         "express": "*",
-        "express-notemplate": "*"
+        "express-notemplate": "*",
+        "pg": "*"
     },
     "repository": {
         "type": "git",

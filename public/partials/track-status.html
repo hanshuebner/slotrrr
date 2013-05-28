@@ -1,12 +1,10 @@
-<div class="driver-card">
+<div class="track-card" track-number="{{track.number}}">
   <div class="label track-number-label">{{track.number}}</div>
   <div class="name">{{track.driverName}}</div>
   <div class="label lap-label">Runde</div>
   <div class="lap">{{track.lap}}</div>
-  <div class="label position-label">Position</div>
-  <div class="position">{{track.position}}</div>
   <div class="label best-lap-label">Schnellste</div>
-  <div class="time best-lap">{{track.bestLap}}s</div>
+  <div class="time best-lap">{{track.bestLap | lapTime}}</div>
   <div class="label last-lap-label">Letzte</div>
-  <div class="time last-lap">{{track.lastLap}}s</div>
+  <div class="time last-lap">{{track.lastLap | lapTime}}</div>
 </div>

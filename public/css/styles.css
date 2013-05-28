@@ -1,9 +1,9 @@
 .main {
-    margin-top: 4em;
+    margin-top: 1.5em;
     margin-left: 1em;
 }
 
-.driver-card {
+.track-card {
     background: #ddd;
     width: 10em;
     height: 4em;
@@ -15,70 +15,60 @@
     display: inline-block;
 }
 
-.driver-card div {
+.track-card div {
     position: absolute;
 }
 
-.driver-card .label {
+.track-card .label {
     font-size: 30%;
     background: #56f;
 }
 
-.driver-card .time {
+.track-card .time {
     font-size: 70%;
 }
 
-.driver-card .track-number-label {
+.track-card .track-number-label {
     left: 1em;
     top: 1em;
 }
 
-.driver-card .track-number {
+.track-card .track-number {
     left: 1.5em;
     top: 0.5em;
 }
 
-.driver-card .name {
+.track-card .name {
     left: 0.7em;
     top: 0.5em;
 }
 
-.driver-card .lap-label {
+.track-card .lap-label {
     left: 1em;
     top: 5em;
 }
 
-.driver-card .lap {
+.track-card .lap {
     left: 1.5em;
     top: 1.7em;
 }
 
-.driver-card .position-label {
-    left: 13em;
-    top: 5em;
-}
-
-.driver-card .position {
-    left: 5.3em;
-    top: 1.7em;
-}
-
-.driver-card .best-lap-label {
+.track-card .best-lap-label {
     left: 1em;
     top: 9em;
 }
 
-.driver-card .best-lap {
+.track-card .best-lap {
     left: 0.4em;
     top: 4.7em;
 }
 
-.driver-card .last-lap-label {
+.track-card .last-lap-label {
     left: 13em;
     top: 9em;
 }
 
-.driver-card .last-lap {
+.track-card .last-lap {
     left: 5.5em;
     top: 4.7em;
 }
