@@ -10,6 +10,23 @@ var SerialPort = require('serialport2').SerialPort;
 var port = new SerialPort();
 
 var serialInput = process.argv[2];
+
+function makeRaces(drivers) {
+    var races = [];
+    for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
+        var race = [];
+        for (var track = 0; track < 4; track++) {
+            race.push({ trackNumber: track, driverName: drivers[(raceNumber + track) % drivers.length] });
+        }
+        races.push(race);
+    }
+    return races;
+}
+
+var races = makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
+var raceIndex = 0;
+var nextRaceIndex = 1;
+
 var timeRemaining = 0;
 var time = "";
 var zeroCharCode = '0'.charCodeAt(0);
@@ -141,15 +158,21 @@ app.configure('development', function() {
 
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
+io.set('log level', 1);
+
 var clients = [];
 
-io.set('log level', 1);
+function sendRaceStatus(socket) {
+    socket.emit('race', { race: races[raceIndex],
+                          nextRace: races[nextRaceIndex] });
+}
+
 io.sockets.on('connection', function (socket) {
     socket.on('disconnect', function () {
         console.log('client disconnected');
         clients.splice(clients.indexOf(socket), 1);
     });
-    socket.emit('message', { type: 'hello' });
+    sendRaceStatus(socket);
     clients.push(socket);
 });
 
@@ -168,16 +191,3 @@ server.listen(app.get('port'), function() {
     console.log("Express server listening on port " + app.get('port'));
 });
 
-function makeRaces(drivers) {
-    var races = [];
-    for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
-        var race = [];
-        for (var track = 0; track < 4; track++) {
-            race.push({ trackNumber: track, driverName: drivers[(raceNumber + track) % drivers.length] });
-        }
-        races.push(race);
-    }
-    return races;
-}
-
-console.log('races', makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']));
