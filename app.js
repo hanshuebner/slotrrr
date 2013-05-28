@@ -38,7 +38,7 @@ function processByte(byte) {
             if (!time.match(/>>/)) {                        // first lap has no time
                 timeMessage.time = parseFloat(time);
             }
-            sendMessage(timeMessage);
+            processDS030Message(timeMessage);
             timeMessage = { type: 'lap' };
         }
     } else {
@@ -50,23 +50,23 @@ function processByte(byte) {
             timeMessage.track = trackIndex(byte);
             break;
         case 0xa0:
-            sendMessage({ type: 'ready' });
+            processDS030Message({ type: 'ready' });
             break;
         case 0xa1:
-            sendMessage({ type: 'set' });
+            processDS030Message({ type: 'set' });
             break;
         case 0xa2:
-            sendMessage({ type: 'go' });
+            processDS030Message({ type: 'go' });
             laps = [0, 0, 0, 0];
             break;
         case 0xa3:
-            sendMessage({ type: 'pause' });
+            processDS030Message({ type: 'pause' });
             break;
         case 0xa4:
-            sendMessage({ type: 'raceEnded' });
+            processDS030Message({ type: 'raceEnded' });
             break;
         case 0xa5:
-            sendMessage({ type: 'raceAborted' });
+            processDS030Message({ type: 'raceAborted' });
             break;
         case 0xa7:
             console.log('bestzeit');
@@ -135,7 +135,7 @@ io.sockets.on('connection', function (socket) {
     clients.push(socket);
 });
 
-function sendMessage(message) {
+function processDS030Message(message) {
     console.log('sending', message, 'to', clients.length, 'clients');
     clients.forEach(function (socket) {
         socket.emit('message', message);
