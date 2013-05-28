@@ -9,7 +9,7 @@ var pg = require('pg');
 var SerialPort = require('serialport2').SerialPort;
 var port = new SerialPort();
 
-var deviceName = '/dev/cu.usbserial-FTCAAI6X';
+var serialInput = process.argv[2];
 var timeRemaining = 0;
 var time = "";
 var zeroCharCode = '0'.charCodeAt(0);
@@ -80,25 +80,43 @@ function processByte(byte) {
     }
 }
 
-port.on('data', function(data) {
-    for (var i = 0; i < data.length; i++) {
-        processByte(data[i]);
+if (!serialInput) {
+    console.log('no DS-030 input provided, running without data');
+} else if (serialInput.match(/^\/dev\//)) {
+    port.on('data', function(data) {
+        for (var i = 0; i < data.length; i++) {
+            processByte(data[i]);
+        }
+    });
+
+    port.on('error', function(err) {
+        console.log('serial port error:', err);
+    });
+
+    port.open(serialInput, {
+        baudRate: 4800,
+        dataBits: 8,
+        parity: 'none',
+        stopBits: 1
+    }, function(err) {
+        if (err) throw err;
+        console.log('serial port open');
+    });
+} else {
+    var serialInputData = JSON.parse(fs.readFileSync(serialInput));
+    var serialInputPointer = 0;
+    console.log('read', serialInputData.length, 'bytes of timed serial data');
+
+    function sendNextSerialByte() {
+        processByte(serialInputData[serialInputPointer][1]);
+        if (++serialInputPointer == serialInputData.length) {
+            serialInputPointer = 0;
+        }
+        setTimeout(sendNextSerialByte, serialInputData[serialInputPointer][0]);
     }
-});
 
-port.on('error', function(err) {
-    console.log('serial port error:', err);
-});
-
-port.open(deviceName, {
-    baudRate: 4800,
-    dataBits: 8,
-    parity: 'none',
-    stopBits: 1
-}, function(err) {
-    if (err) throw err;
-    console.log('serial port open');
-});
+    sendNextSerialByte();
+}
 
 var app = express();
 
