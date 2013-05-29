@@ -1,5 +1,6 @@
 'use strict';
 
+var debugMessages = false;
 var app = angular.module('slotmaniaApp', ['$strap.directives']);
 
 app.directive('trackStatus', function () {
@@ -24,9 +25,12 @@ function SlotmaniaController($scope) {
     socket.on('race', function (data) {
         $scope.track = data.race;
         $scope.nextRace = data.nextRace;
+        $scope.$apply();
     });
     socket.on('message', function (data) {
-        console.log('message', data);
+        if (debugMessages) {
+            console.log('message', data);
+        }
         if (data.type == 'lap') {
             var track = $scope.track[data.track];
             track.lap = data.lap;

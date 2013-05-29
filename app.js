@@ -16,7 +16,7 @@ function makeRaces(drivers) {
     for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
         var race = [];
         for (var track = 0; track < 4; track++) {
-            race.push({ trackNumber: track, driverName: drivers[(raceNumber + track) % drivers.length] });
+            race.push({ number: track + 1, driverName: drivers[(raceNumber + track) % drivers.length] });
         }
         races.push(race);
     }
@@ -163,6 +163,7 @@ io.set('log level', 1);
 var clients = [];
 
 function sendRaceStatus(socket) {
+    console.log('sendRaceStatus, race', races[raceIndex]);
     socket.emit('race', { race: races[raceIndex],
                           nextRace: races[nextRaceIndex] });
 }
@@ -176,7 +177,33 @@ io.sockets.on('connection', function (socket) {
     clients.push(socket);
 });
 
+function nextRace()
+{
+    if (nextRaceIndex == 0) {
+        races = makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
+    }
+    raceIndex = nextRaceIndex;
+    nextRaceIndex++;
+    if (nextRaceIndex == races.length) {
+        nextRaceIndex = 0;
+    }
+    clients.forEach(sendRaceStatus);
+}
+
 function processDS030Message(message) {
+    switch (message.type) {
+    case 'ready':
+        nextRace();
+        break;
+    case 'lap':
+        var track = races[raceIndex][message.track];
+        track.lap = message.lap;
+        track.lastLap = message.time;
+        if (!track.bestLap || message.isBestLap) {
+            track.bestLap = message.time;
+        }
+        break;
+    }
     console.log('sending', message, 'to', clients.length, 'clients');
     clients.forEach(function (socket) {
         socket.emit('message', message);
