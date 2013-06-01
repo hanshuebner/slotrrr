@@ -16,7 +16,7 @@ function makeRaces(drivers) {
     for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
         var race = [];
         for (var track = 0; track < 4; track++) {
-            race.push({ number: track + 1, driverName: drivers[(raceNumber + track) % drivers.length] });
+            race.push({ number: track + 1, rank: track, driverName: drivers[(raceNumber + track) % drivers.length] });
         }
         races.push(race);
     }

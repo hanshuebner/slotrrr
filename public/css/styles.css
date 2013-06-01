@@ -7,12 +7,29 @@
     background: #ddd;
     width: 10em;
     height: 4em;
-    position: relative;
+    position: absolute;
     font-size: 250%;
     border-radius: 15px;
     margin-bottom: .3em;
     margin-right: .3em;
     display: inline-block;
+    left: 0.5em;
+}
+
+.rank0 {
+    top: 0.5em;
+}
+
+.rank1 {
+    top: 5em;
+}
+
+.rank2 {
+    top: 9.5em;
+}
+
+.rank3 {
+    top: 14em;
 }
 
 .track-card div {
@@ -72,3 +89,4 @@
     left: 5.6em;
     top: 4.7em;
 }
+

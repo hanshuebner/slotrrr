@@ -3,6 +3,11 @@
 var debugMessages = false;
 var app = angular.module('slotmaniaApp', ['$strap.directives']);
 
+function getTime()
+{
+    return new Date().getTime();
+}
+
 app.directive('trackStatus', function () {
     return {
         restrict: 'E',
@@ -22,8 +27,28 @@ app.filter('lapTime', function () {
 
 function SlotmaniaController($scope) {
     var socket = io.connect('http://localhost');
+    $scope.race = {};
+
+    function calculateRanks() {
+        var ranking = $scope.track.slice();
+        ranking.sort(function (track1, track2) {
+            var lap1 = track1.lap || -1;
+            var lap2 = track2.lap || -1;
+            if (lap1 == lap2) {
+                return track1.lapTimestamp > track2.lapTimestamp;
+            } else {
+                return lap1 < lap2;
+            }
+        });
+        var rank = 0;
+        ranking.forEach(function (track) {
+            track.rank = rank++;
+        });
+    }
+    
     socket.on('race', function (data) {
         $scope.track = data.race;
+        $scope.race.tracks = data.race;
         $scope.nextRace = data.nextRace;
         $scope.$apply();
     });
@@ -35,9 +60,11 @@ function SlotmaniaController($scope) {
             var track = $scope.track[data.track];
             track.lap = data.lap;
             track.lastLap = data.time;
+            track.lapTimestamp = getTime();
             if (!track.bestLap || data.isBestLap) {
                 track.bestLap = data.time;
             }
+            calculateRanks();
         }
         $scope.$apply();
     });
