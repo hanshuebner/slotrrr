@@ -65,6 +65,17 @@ function SlotmaniaController($scope) {
                 track.bestLap = data.time;
             }
             calculateRanks();
+        } else {
+            $scope.raceStatus = data.type;
+            var raceStatusText = {
+                ready: 'Fertig',
+                set: 'Los',
+                go: 'Rennnen läuft',
+                pause: 'Rennen unterbrochen',
+                raceEnded: 'Rennen beendet',
+                raceAborted: 'Rennen abgebrochen'
+            };
+            $scope.raceStatusText = raceStatusText[data.type];
         }
         $scope.$apply();
     });

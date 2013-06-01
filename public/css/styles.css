@@ -3,90 +3,110 @@
     margin-left: 1em;
 }
 
-.track-card {
-    background: #ddd;
+.card {
+    background: #eee;
     width: 10em;
     height: 4em;
     position: absolute;
     font-size: 250%;
     border-radius: 15px;
-    margin-bottom: .3em;
-    margin-right: .3em;
-    display: inline-block;
     left: 0.5em;
 }
 
-.rank0 {
+.race-status {
+    background: #9e9;
     top: 0.5em;
+    height: 2em;
+}
+
+.race-status div, .next-race div {
+    margin: 0.7em;
+}
+
+.rank0 {
+    top: 3.0em;
 }
 
 .rank1 {
-    top: 5em;
+    top: 7.5em;
 }
 
 .rank2 {
-    top: 9.5em;
+    top: 12.0em;
 }
 
 .rank3 {
-    top: 14em;
+    top: 16.5em;
 }
 
-.track-card div {
+.track {
+    background: #ddf;
+}
+
+.track div {
     position: absolute;
 }
 
-.track-card .label {
+.track .label {
     font-size: 30%;
     background: #56f;
 }
 
-.track-card .time {
+.track .time {
     font-size: 70%;
 }
 
-.track-card .track-number-label {
+.track .track-number-label {
     left: 1em;
     top: 1em;
 }
 
-.track-card .track-number {
+.track .track-number {
     left: 1.5em;
     top: 0.5em;
 }
 
-.track-card .name {
+.track .name {
     left: 1.0em;
     top: 0.4em;
 }
 
-.track-card .lap-label {
+.track .lap-label {
     left: 1em;
     top: 5em;
 }
 
-.track-card .lap {
+.track .lap {
     left: 1.8em;
     top: 1.7em;
 }
 
-.track-card .best-lap-label {
+.track .best-lap-label {
     left: 1em;
     top: 9em;
 }
 
-.track-card .best-lap {
+.track .best-lap {
     left: 0.5em;
     top: 4.7em;
 }
 
-.track-card .last-lap-label {
+.track .last-lap-label {
     left: 13em;
     top: 9em;
 }
 
-.track-card .last-lap {
+.track .last-lap {
     left: 5.6em;
     top: 4.7em;
 }
 
+.next-race {
+    top: 0.5em;
+    left: 11em;
+    height: 6.5em;
+}
+
+.next-race li {
+    margin-bottom: 0.5em;
+}

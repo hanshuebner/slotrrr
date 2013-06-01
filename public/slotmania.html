@@ -9,9 +9,19 @@
     <link rel="stylesheet" href="/css/styles.css"/>
   </head>
   <body ng-controller="SlotmaniaController">
+    <div class="card race-status race-status-{{raceStatus}}"><div>{{raceStatusText}}</div></div>
     <div class="main">
       <track-status ng-repeat="track in race.tracks" track="track"/>
-      <br/>
+    </div>
+    <div class="card next-race">
+      <div>
+        Nächstes Rennen:
+        <div>
+          <ul ng-repeat="track in nextRace">
+            <li>{{track.driverName}}</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </body>
   <script src="/lib/jquery.min.js"></script>
