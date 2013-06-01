@@ -110,3 +110,15 @@
 .next-race li {
     margin-bottom: 0.5em;
 }
+
+.race-status-raceEnded {
+    background: #fdd;
+}
+
+.race-status-pause {
+    background: #f88;
+}
+
+.race-status-ready, .race-status-set {
+    background: #fa8;
+}
