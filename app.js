@@ -161,11 +161,15 @@ var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
 var clients = [];
+var lastRaceMessage;
 
 function sendRaceStatus(socket) {
     console.log('sendRaceStatus, race', races[raceIndex]);
     socket.emit('race', { race: races[raceIndex],
                           nextRace: races[nextRaceIndex] });
+    if (lastRaceMessage) {
+        socket.emit('message', lastRaceMessage);
+    }
 }
 
 io.sockets.on('connection', function (socket) {
@@ -194,6 +198,7 @@ function processDS030Message(message) {
     switch (message.type) {
     case 'ready':
         nextRace();
+        lastRaceMessage = message;
         break;
     case 'lap':
         var track = races[raceIndex][message.track];
@@ -203,6 +208,8 @@ function processDS030Message(message) {
             track.bestLap = message.time;
         }
         break;
+    default:
+        lastRaceMessage = message;
     }
     console.log('sending', message, 'to', clients.length, 'clients');
     clients.forEach(function (socket) {
