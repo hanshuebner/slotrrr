@@ -1,4 +1,4 @@
-# slotmania - Slotcar racing utilities for DS-030 track controller
+# slotrrr - Slotcar racing utilities for DS-030 track controller
 
 ## DS-030 protocol description
 
