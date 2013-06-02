@@ -13,9 +13,15 @@ function makeRaces(drivers) {
     var races = [];
     for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
         var race = [];
-        for (var track = 0; track < 4; track++) {
-            race.push({ number: track + 1, rank: track, driverName: drivers[(raceNumber + track) % drivers.length] });
-        }
+        var raceDrivers = [];
+        for (var driver = 0; driver < 4; driver++) {
+            raceDrivers.push(drivers[(raceNumber + driver) % drivers.length]);
+	}
+        for (var part = 0; part < 4; part++) {
+            for (var track = 0; track < 4; track++) {
+		race.push({ number: track + 1, rank: track, driverName: raceDrivers[(track + part) % raceDrivers.length] });
+            }
+	}
         races.push(race);
     }
     return races;
@@ -130,7 +136,7 @@ if (!serialInput) {
         if (++serialInputPointer == serialInputData.length) {
             serialInputPointer = 0;
         }
-        setTimeout(sendNextSerialByte, serialInputData[serialInputPointer][0]);
+        setTimeout(sendNextSerialByte, serialInputData[serialInputPointer][0] / 10);
     }
 
     sendNextSerialByte();
