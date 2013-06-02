@@ -1,7 +1,7 @@
 'use strict';
 
 var debugMessages = false;
-var app = angular.module('slotmaniaApp', ['$strap.directives']);
+var app = angular.module('raceMonitorApp', ['$strap.directives']);
 
 function getTime()
 {
@@ -25,7 +25,7 @@ app.filter('lapTime', function () {
     }
 });
 
-function SlotmaniaController($scope) {
+function RaceMonitorController($scope) {
     var socket = io.connect();
     $scope.race = {};
 
@@ -80,7 +80,7 @@ function SlotmaniaController($scope) {
         $scope.$apply();
     });
 }
-SlotmaniaController.$inject = ['$scope'];
+RaceMonitorController.$inject = ['$scope'];
 
 if (window.location.hash == '#tracks') {
     $('#layout-stylesheet').attr('href', '/css/tracks.css');

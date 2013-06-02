@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="de" ng-app="slotmaniaApp">
+<html lang="de" ng-app="raceMonitorApp">
   <head>
     <meta charset="utf-8"/>
-    <title>Slotmania Race Monitor</title>
+    <title>RaceMonitor Race Monitor</title>
     <link rel="stylesheet" href="/lib/bootstrap.min.css"/>
     <link rel="stylesheet" href="/lib/bootstrap-responsive.min.css"/>
     <link rel="stylesheet" href="/lib/font-awesome.min.css"/>
     <link rel="stylesheet" href="/css/styles.css"/>
     <link rel="stylesheet" href="/css/ranks.css" id="layout-stylesheet"/>
   </head>
-  <body ng-controller="SlotmaniaController">
+  <body ng-controller="RaceMonitorController">
     <div class="card race-status race-status-{{raceStatus}}"><div>{{raceStatusText}}</div></div>
     <div class="main">
       <track-status ng-repeat="track in race.tracks" track="track"/>
@@ -30,5 +30,5 @@
   <script src="/lib/angular.min.js"></script>
   <script src="/lib/angular-strap.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/slotmania.js"></script>
+  <script src="/js/race-monitor.js"></script>
 </html>

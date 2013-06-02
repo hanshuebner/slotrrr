@@ -220,7 +220,11 @@ function processDS030Message(message) {
 }
 
 app.get('/', function (req, res) {
-    res.redirect('/slotmania.html');
+    res.redirect('/race-monitor.html');
+});
+
+app.get('/slotmania.html', function (req, res) {
+    res.redirect('/race-monitor.html');
 });
 
 server.listen(app.get('port'), function() {
