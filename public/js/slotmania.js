@@ -70,7 +70,7 @@ function SlotmaniaController($scope) {
             var raceStatusText = {
                 ready: 'Fertig',
                 set: 'Los',
-                go: 'Rennnen läuft',
+                go: 'Rennen läuft',
                 pause: 'Rennen unterbrochen',
                 raceEnded: 'Rennen beendet',
                 raceAborted: 'Rennen abgebrochen'
@@ -81,3 +81,7 @@ function SlotmaniaController($scope) {
     });
 }
 SlotmaniaController.$inject = ['$scope'];
+
+if (window.location.hash == '#tracks') {
+    $('#layout-stylesheet').attr('href', '/css/tracks.css');
+}

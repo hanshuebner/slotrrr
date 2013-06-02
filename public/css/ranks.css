@@ -1,0 +1,20 @@
+.rank0 {
+    top: 3.0em;
+}
+
+.rank1 {
+    top: 7.5em;
+}
+
+.rank2 {
+    top: 12.0em;
+}
+
+.rank3 {
+    top: 16.5em;
+}
+
+.next-race {
+    top: 0.5em;
+    left: 11em;
+}

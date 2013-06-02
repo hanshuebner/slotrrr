@@ -1,0 +1,21 @@
+.track1 {
+    top: 3.0em;
+}
+
+.track2 {
+    top: 3.0em;
+    left: 11em;
+}
+
+.track3 {
+    top: 7.5em;
+}
+
+.track4 {
+    top: 7.5em;
+    left: 11em;
+}
+
+.next-race {
+    top: 12em;
+}
