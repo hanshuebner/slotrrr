@@ -6,8 +6,6 @@ var http = require('http');
 var express = require('express');
 var notemplate = require('express-notemplate');
 var pg = require('pg');
-var SerialPort = require('serialport2').SerialPort;
-var port = new SerialPort();
 
 var serialInput = process.argv[2];
 
@@ -100,6 +98,9 @@ function processByte(byte) {
 if (!serialInput) {
     console.log('no DS-030 input provided, running without data');
 } else if (serialInput.match(/^\/dev\//)) {
+    var SerialPort = require('serialport2').SerialPort;
+    var port = new SerialPort();
+
     port.on('data', function(data) {
         for (var i = 0; i < data.length; i++) {
             processByte(data[i]);

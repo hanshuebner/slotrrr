@@ -26,7 +26,7 @@ app.filter('lapTime', function () {
 });
 
 function SlotmaniaController($scope) {
-    var socket = io.connect('http://localhost');
+    var socket = io.connect();
     $scope.race = {};
 
     function calculateRanks() {
