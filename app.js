@@ -8,6 +8,7 @@ var notemplate = require('express-notemplate');
 var pg = require('pg');
 
 var serialInput = process.argv[2];
+var raceDefinitionFile = process.argv[3];
 
 function makeRaces(drivers) {
     var races = [];
@@ -21,7 +22,7 @@ function makeRaces(drivers) {
     return races;
 }
 
-var races = makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
+var races = raceDefinitionFile ? JSON.parse(fs.readFileSync(raceDefinitionFile)) : makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
 var raceIndex = 0;
 var nextRaceIndex = 1;
 
