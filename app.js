@@ -12,17 +12,17 @@ var serialInput = process.argv[2];
 function makeRaces(drivers) {
     var races = [];
     for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
-        var race = [];
         var raceDrivers = [];
         for (var driver = 0; driver < 4; driver++) {
             raceDrivers.push(drivers[(raceNumber + driver) % drivers.length]);
 	}
         for (var part = 0; part < 4; part++) {
+            var race = [];
             for (var track = 0; track < 4; track++) {
 		race.push({ number: track + 1, rank: track, driverName: raceDrivers[(track + part) % raceDrivers.length] });
             }
+            races.push(race);
 	}
-        races.push(race);
     }
     return races;
 }
