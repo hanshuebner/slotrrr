@@ -26,6 +26,11 @@ app.filter('lapTime', function () {
 });
 
 function RaceMonitorController($scope) {
+    $scope.layout = 'ranks';
+    $scope.selectLayout = function (layoutName) {
+        $scope.layout = layoutName;
+    }
+    
     var socket = io.connect();
     $scope.race = {};
 
@@ -45,13 +50,14 @@ function RaceMonitorController($scope) {
             track.rank = rank++;
         });
     }
-    
+
     socket.on('race', function (data) {
         $scope.track = data.race;
         $scope.race.tracks = data.race;
         $scope.nextRace = data.nextRace;
         $scope.$apply();
     });
+
     socket.on('message', function (data) {
         if (debugMessages) {
             console.log('message', data);
@@ -81,7 +87,3 @@ function RaceMonitorController($scope) {
     });
 }
 RaceMonitorController.$inject = ['$scope'];
-
-if (window.location.hash == '#tracks') {
-    $('#layout-stylesheet').attr('href', '/css/tracks.css');
-}

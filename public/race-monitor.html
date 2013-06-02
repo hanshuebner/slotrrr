@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de" ng-app="raceMonitorApp">
+<html lang="de" ng-app="raceMonitorApp" ng-controller="RaceMonitorController">
   <head>
     <meta charset="utf-8"/>
     <title>RaceMonitor Race Monitor</title>
@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="/lib/bootstrap-responsive.min.css"/>
     <link rel="stylesheet" href="/lib/font-awesome.min.css"/>
     <link rel="stylesheet" href="/css/styles.css"/>
-    <link rel="stylesheet" href="/css/ranks.css" id="layout-stylesheet"/>
+    <link rel="stylesheet" ng-href="/css/{{layout}}.css"/>
   </head>
-  <body ng-controller="RaceMonitorController">
+  <body>
+    <div class="layout-selector">
+      <div class="btn-group" ng-model="layout" bs-buttons-radio>
+        <button type="button" class="btn" value="ranks">Ränge</button>
+        <button type="button" class="btn" value="tracks">Spuren</button>
+      </div>
+    </div>
     <div class="card race-status race-status-{{raceStatus}}"><div>{{raceStatusText}}</div></div>
     <div class="main">
       <track-status ng-repeat="track in race.tracks" track="track"/>

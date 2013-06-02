@@ -104,3 +104,9 @@
 .race-status-ready, .race-status-set {
     background: #fa8;
 }
+
+.layout-selector {
+    position: absolute;
+    bottom: 0.5em;
+    left: 0.5em;
+}
