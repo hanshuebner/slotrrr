@@ -23,8 +23,8 @@ function makeRaces(drivers) {
 }
 
 var races = raceDefinitionFile ? JSON.parse(fs.readFileSync(raceDefinitionFile)) : makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
-var raceIndex = 0;
-var nextRaceIndex = 1;
+var race = null;
+var nextRace = null;
 
 var timeRemaining = 0;
 var time = "";
@@ -163,15 +163,11 @@ var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
 var clients = [];
-var lastRaceMessage;
 
 function sendRaceStatus(socket) {
-    console.log('sendRaceStatus, race', races[raceIndex]);
-    socket.emit('race', { race: races[raceIndex],
-                          nextRace: races[nextRaceIndex] });
-    if (lastRaceMessage) {
-        socket.emit('message', lastRaceMessage);
-    }
+    console.log('sendRaceStatus, race', race);
+    socket.emit('race', { race: race,
+                          nextRace: nextRace });
 }
 
 io.sockets.on('connection', function (socket) {
@@ -183,27 +179,17 @@ io.sockets.on('connection', function (socket) {
     clients.push(socket);
 });
 
-function nextRace()
-{
-    if (nextRaceIndex == 0) {
-        races = makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
-    }
-    raceIndex = nextRaceIndex;
-    nextRaceIndex++;
-    if (nextRaceIndex == races.length) {
-        nextRaceIndex = 0;
-    }
-    clients.forEach(sendRaceStatus);
-}
-
 function processDS030Message(message) {
     switch (message.type) {
     case 'ready':
-        nextRace();
-        lastRaceMessage = message;
+        race = races[0];
+        races.shift();
+        nextRace = races[0];
+        clients.forEach(sendRaceStatus);
+        race.lastMessage = message;
         break;
     case 'lap':
-        var track = races[raceIndex][message.track];
+        var track = race[message.track];
         track.lap = message.lap;
         track.lastLap = message.time;
         if (!track.bestLap || message.isBestLap) {
@@ -211,7 +197,7 @@ function processDS030Message(message) {
         }
         break;
     default:
-        lastRaceMessage = message;
+        race.lastMessage = message;
     }
     console.log('sending', message, 'to', clients.length, 'clients');
     clients.forEach(function (socket) {
