@@ -208,6 +208,12 @@ app.get('/', function (req, res) {
     res.redirect('/race-monitor.html');
 });
 
+app.post('/races', function (req, res) {
+    console.log('body', req.body);
+    races = req.body;
+    clients.forEach(sendRaceStatus);
+});
+
 app.get('/slotmania.html', function (req, res) {
     res.redirect('/race-monitor.html');
 });

@@ -1,29 +1,19 @@
 <!doctype html>
-<html lang="de" ng-app="raceMonitorApp" ng-controller="RaceMonitorController">
+<html lang="de" ng-app="raceManagerApp" ng-controller="RaceManagerController">
   <head>
     <meta charset="utf-8"/>
     <title>RaceMonitor Race Monitor</title>
     <link rel="stylesheet" href="/lib/bootstrap.min.css"/>
     <link rel="stylesheet" href="/lib/bootstrap-responsive.min.css"/>
     <link rel="stylesheet" href="/lib/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/lib/jquery-ui-1.10.1.custom.min.css"/>
     <link rel="stylesheet" href="/css/styles.css"/>
-    <link rel="stylesheet" ng-href="/css/{{layout}}.css"/>
   </head>
-  <body>
-    <div class="layout-selector">
-      <div class="btn-group" ng-model="layout" bs-buttons-radio>
-        <button type="button" class="btn" value="ranks">Ränge</button>
-        <button type="button" class="btn" value="tracks">Spuren</button>
-      </div>
-    </div>
-    <div class="card race-status race-status-{{raceStatus}}"><div>{{raceStatusText}}</div></div>
-    <div class="main">
-      <track-status ng-repeat="track in race.tracks" track="track"/>
-    </div>
+  <body class="main">
     <div class="card next-race">
       <div>Nächste Rennen:</div>
-      <div>
-        <ul ng-repeat="race in nextRaces">
+      <div sortable-races>
+        <ul class="sortable" ng-repeat="race in nextRaces">
           <li class="next-race-driver" ng-repeat="track in race">{{track.driverName}}</li>
         </ul>
       </div>
@@ -32,7 +22,9 @@
   <script src="/lib/jquery.min.js"></script>
   <script src="/lib/bootstrap.min.js"></script>
   <script src="/lib/angular.min.js"></script>
+  <script src="/lib/angular-resource.min.js"></script>
   <script src="/lib/angular-strap.min.js"></script>
+  <script src="/lib/jquery-ui-1.10.1.custom.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/js/race-monitor.js"></script>
+  <script src="/js/race-manager.js"></script>
 </html>

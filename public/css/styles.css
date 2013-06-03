@@ -18,7 +18,7 @@
     height: 2em;
 }
 
-.race-status div, .next-race div {
+.race-status > div, .next-race > div {
     margin: 0.7em;
 }
 
@@ -112,4 +112,13 @@
     position: absolute;
     bottom: 0.5em;
     left: 0.5em;
+}
+
+.next-race .sortable {
+    border-radius: 7.5px;
+    background: #cdc;
+    margin-bottom: 0.5em;
+    padding-left: 0.4em;
+    padding-bottom: 0.2em;
+    cursor: move;
 }
