@@ -54,7 +54,7 @@ function RaceMonitorController($scope) {
     socket.on('race', function (data) {
         $scope.track = data.race;
         $scope.race.tracks = data.race;
-        $scope.nextRace = data.nextRace;
+        $scope.nextRaces = data.nextRaces;
         $scope.$apply();
     });
 

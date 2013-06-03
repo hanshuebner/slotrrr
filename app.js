@@ -24,7 +24,6 @@ function makeRaces(drivers) {
 
 var races = raceDefinitionFile ? JSON.parse(fs.readFileSync(raceDefinitionFile)) : makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
 var race = null;
-var nextRace = null;
 
 var timeRemaining = 0;
 var time = "";
@@ -165,9 +164,10 @@ io.set('log level', 1);
 var clients = [];
 
 function sendRaceStatus(socket) {
-    console.log('sendRaceStatus, race', race);
+    console.log('sendRaceStatus', { race: race,
+                                    nextRaces: races });
     socket.emit('race', { race: race,
-                          nextRace: nextRace });
+                          nextRaces: races });
 }
 
 io.sockets.on('connection', function (socket) {
@@ -184,7 +184,6 @@ function processDS030Message(message) {
     case 'ready':
         race = races[0];
         races.shift();
-        nextRace = races[0];
         clients.forEach(sendRaceStatus);
         race.lastMessage = message;
         break;

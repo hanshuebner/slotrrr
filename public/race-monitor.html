@@ -22,10 +22,10 @@
     </div>
     <div class="card next-race">
       <div>
-        Nächstes Rennen:
+        Nächste Rennen:
         <div>
-          <ul ng-repeat="track in nextRace">
-            <li>{{track.driverName}}</li>
+          <ul ng-repeat="race in nextRaces" bs-buttons-radio>
+            <li class="next-race-driver" ng-repeat="track in race">{{track.driverName}}</button></li>
           </ul>
         </div>
       </div>

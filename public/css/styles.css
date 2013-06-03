@@ -6,7 +6,6 @@
 .card {
     background: #eee;
     width: 10em;
-    height: 4em;
     position: absolute;
     font-size: 250%;
     border-radius: 15px;
@@ -25,6 +24,7 @@
 
 .track {
     background: #ddf;
+    height: 4em;
 }
 
 .track div {
@@ -85,12 +85,15 @@
     top: 4.7em;
 }
 
-.next-race {
-    height: 6.5em;
+.next-race ul {
+    margin: 0em;
 }
 
 .next-race li {
-    margin-bottom: 0.5em;
+    display: inline;
+    font-size: 50%;
+    margin-right: 0.5em;
+    margin-left: 0em;
 }
 
 .race-status-raceEnded {
