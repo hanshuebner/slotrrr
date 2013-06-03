@@ -7,6 +7,11 @@ var express = require('express');
 var notemplate = require('express-notemplate');
 var pg = require('pg');
 
+if (process.argv.length != 4) {
+    console.log('usage:', process.argv[1], ' <serial-input> <race-definition-file>');
+    process.exit(1);
+}
+
 var serialInput = process.argv[2];
 var raceDefinitionFile = process.argv[3];
 
@@ -24,15 +29,16 @@ function makeRaces(drivers) {
 
 var roundName = raceDefinitionFile ? raceDefinitionFile.replace(/.*?([^\/.]+)[^\/]*$/, "$1") : 'test';
 var statisticsFileName = roundName + '-results.xls';
-var races = raceDefinitionFile ? JSON.parse(fs.readFileSync(raceDefinitionFile)) : makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
+var races = JSON.parse(fs.readFileSync(raceDefinitionFile));
 var race = null;
-var raceRunning = false;
+
+function logLap(track) {
+}
 
 var timeRemaining = 0;
 var time = "";
 var zeroCharCode = '0'.charCodeAt(0);
 var timeMessage = { type: 'time' };
-var laps = [0, 0, 0, 0];
 
 function trackIndex(mask) {
     for (var index = 0; ; mask <<= 1, index++) {
@@ -51,7 +57,7 @@ function processByte(byte) {
         }
         timeRemaining--;
         if (timeRemaining == 0) {
-            timeMessage.lap = ++laps[timeMessage.track];
+            timeMessage.lap = ++race.laps[timeMessage.track];
             console.log('time: ', time);
             if (!time.match(/>>/)) {                        // first lap has no time
                 timeMessage.time = parseFloat(time);
@@ -75,7 +81,6 @@ function processByte(byte) {
             break;
         case 0xa2:
             processDS030Message({ type: 'go' });
-            laps = [0, 0, 0, 0];                            // fixme: pause clears laps
             break;
         case 0xa3:
             processDS030Message({ type: 'pause' });
@@ -188,8 +193,11 @@ function processDS030Message(message) {
     }
     switch (message.type) {
     case 'ready':
-        race = races[0];
-        races.shift();
+        if (!race || !race.paused) {
+            race = races[0];
+            race.laps = [0, 0, 0, 0];
+            races.shift();
+        }
         clients.forEach(sendRaceStatus);
         break;
     case 'lap':
@@ -199,13 +207,21 @@ function processDS030Message(message) {
         if (!track.bestLap || message.isBestLap) {
             track.bestLap = message.time;
         }
+        if (race.running) {
+            logLap(track);
+        }
+        break;
+    case 'pause':
+        race.paused = true;
         break;
     case 'go':
-        raceRunning = true;
+        race.running = true;
+        race.paused = false;
         break
     case 'raceEnded':
     case 'raceAborted':
-        raceRunning = false;
+        race.running = false;
+        break;
     }
     console.log('sending', message, 'to', clients.length, 'clients');
     clients.forEach(function (socket) {
