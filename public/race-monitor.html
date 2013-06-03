@@ -24,7 +24,7 @@
       <div>Nächste Rennen:</div>
       <div>
         <ul ng-repeat="race in nextRaces">
-          <li class="next-race-driver" ng-repeat="track in race">{{track.driverName}}</li>
+          <li class="next-race-driver" ng-repeat="track in race.tracks">{{track.driverName}}</li>
         </ul>
       </div>
     </div>

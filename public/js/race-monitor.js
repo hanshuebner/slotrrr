@@ -35,7 +35,7 @@ function RaceMonitorController($scope) {
     $scope.race = {};
 
     function calculateRanks() {
-        var ranking = $scope.track.slice();
+        var ranking = $scope.race.tracks.slice();
         ranking.sort(function (track1, track2) {
             var lap1 = track1.lap || -1;
             var lap2 = track2.lap || -1;
@@ -55,8 +55,7 @@ function RaceMonitorController($scope) {
         if (debugMessages) {
             console.log('message', data);
         }
-        $scope.track = data.race;
-        $scope.race.tracks = data.race;
+        $scope.race = data.race;
         $scope.nextRaces = data.nextRaces;
         $scope.$apply();
     });
@@ -66,7 +65,7 @@ function RaceMonitorController($scope) {
             console.log('message', data);
         }
         if (data.type == 'lap') {
-            var track = $scope.track[data.track];
+            var track = $scope.race.tracks[data.track];
             track.lap = data.lap;
             track.lastLap = data.time;
             track.lapTimestamp = getTime();

@@ -13,17 +13,20 @@ var raceDefinitionFile = process.argv[3];
 function makeRaces(drivers) {
     var races = [];
     for (var raceNumber = 0; raceNumber < drivers.length; raceNumber++) {
-        var race = [];
+        var tracks = [];
         for (var track = 0; track < 4; track++) {
-            race.push({ number: track + 1, rank: track, driverName: drivers[(raceNumber + track) % drivers.length] });
+                tracks.push({ number: track + 1, rank: track, driverName: drivers[(raceNumber + track) % drivers.length] });
         }
-        races.push(race);
+        races.push({ number: raceNumber + 1, tracks: tracks });
     }
     return races;
 }
 
+var roundName = raceDefinitionFile ? raceDefinitionFile.replace(/.*?([^\/.]+)[^\/]*$/, "$1") : 'test';
+var statisticsFileName = roundName + '-results.xls';
 var races = raceDefinitionFile ? JSON.parse(fs.readFileSync(raceDefinitionFile)) : makeRaces(['Christoph', 'Andreas', 'Olaf', 'Hans', 'Henrik', 'Michel', 'Patrick']);
 var race = null;
+var raceRunning = false;
 
 var timeRemaining = 0;
 var time = "";
@@ -72,7 +75,7 @@ function processByte(byte) {
             break;
         case 0xa2:
             processDS030Message({ type: 'go' });
-            laps = [0, 0, 0, 0];
+            laps = [0, 0, 0, 0];                            // fixme: pause clears laps
             break;
         case 0xa3:
             processDS030Message({ type: 'pause' });
@@ -180,23 +183,29 @@ io.sockets.on('connection', function (socket) {
 });
 
 function processDS030Message(message) {
+    if (race && message.type != 'lap') {
+        race.lastMessage = message;
+    }
     switch (message.type) {
     case 'ready':
         race = races[0];
         races.shift();
         clients.forEach(sendRaceStatus);
-        race.lastMessage = message;
         break;
     case 'lap':
-        var track = race[message.track];
+        var track = race.tracks[message.track];
         track.lap = message.lap;
         track.lastLap = message.time;
         if (!track.bestLap || message.isBestLap) {
             track.bestLap = message.time;
         }
         break;
-    default:
-        race.lastMessage = message;
+    case 'go':
+        raceRunning = true;
+        break
+    case 'raceEnded':
+    case 'raceAborted':
+        raceRunning = false;
     }
     console.log('sending', message, 'to', clients.length, 'clients');
     clients.forEach(function (socket) {
