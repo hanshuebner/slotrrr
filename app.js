@@ -58,7 +58,6 @@ function processByte(byte) {
         timeRemaining--;
         if (timeRemaining == 0) {
             timeMessage.lap = ++race.laps[timeMessage.track];
-            console.log('time: ', time);
             if (!time.match(/>>/)) {                        // first lap has no time
                 timeMessage.time = parseFloat(time);
             }
@@ -70,7 +69,6 @@ function processByte(byte) {
         case 0x80: case 0x40: case 0x20: case 0x10:
             time = '';
             timeRemaining = 3;
-            console.log('time for ', trackIndex(byte));
             timeMessage.track = trackIndex(byte);
             break;
         case 0xa0:
@@ -92,13 +90,12 @@ function processByte(byte) {
             processDS030Message({ type: 'raceAborted' });
             break;
         case 0xa7:
-            console.log('bestzeit');
             timeMessage.isBestLap = true;
             break;
         case 0xb3:
             break;
         default:
-            console.log(byte.toString(16));
+            console.log('uninterpreted DS-030 byte', byte.toString(16));
         }
     }
 }
@@ -172,8 +169,6 @@ io.set('log level', 1);
 var clients = [];
 
 function sendRaceStatus(socket) {
-    console.log('sendRaceStatus', { race: race,
-                                    nextRaces: races });
     socket.emit('race', { race: race,
                           nextRaces: races });
 }
@@ -234,7 +229,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/races', function (req, res) {
-    console.log('body', req.body);
+    console.log('races changed:', req.body);
     races = req.body;
     clients.forEach(sendRaceStatus);
 });
