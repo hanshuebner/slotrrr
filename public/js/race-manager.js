@@ -3,7 +3,9 @@
 var debugMessages = false;
 var app = angular.module('raceManagerApp', ['$strap.directives', 'ngResource']);
 
-function RaceManagerController($scope) {
+function RaceManagerController($scope, $resource) {
+    $resource('/time', {}, { update: { method: 'PUT' } })
+        .update({ time: (new Date).toString() });
     var socket = io.connect();
     socket.on('race', function (data) {
         if (debugMessages) {
@@ -13,7 +15,7 @@ function RaceManagerController($scope) {
         $scope.$apply();
     });
 }
-RaceManagerController.$inject = ['$scope'];
+RaceManagerController.$inject = ['$scope', '$resource'];
 
 app.directive('sortableRaces', [ '$resource', function ($resource) {
     return {

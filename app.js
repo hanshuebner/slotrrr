@@ -6,6 +6,7 @@ var http = require('http');
 var express = require('express');
 var notemplate = require('express-notemplate');
 var pg = require('pg');
+var child_process = require('child_process');
 
 if (process.argv.length != 4) {
     console.log('usage:', process.argv[1], ' <serial-input> <race-definition-file>');
@@ -232,6 +233,22 @@ app.post('/races', function (req, res) {
     console.log('races changed:', req.body);
     races = req.body;
     clients.forEach(sendRaceStatus);
+});
+
+app.put('/time', function (req, res) {
+    console.log('set time', req.body.time);
+    child_process.exec('sudo date -s "' + req.body.time + '"',
+                       function (error, stdout, stderr) {
+                           if (error != null) {
+                               console.log('error setting time', error);
+                           }
+                           if (stdout) {
+                               console.log('set time - stdout:', stdout);
+                           }
+                           if (stderr) {
+                               console.log('set time - stderr:', stderr);
+                           }
+                       });
 });
 
 app.get('/slotmania.html', function (req, res) {
