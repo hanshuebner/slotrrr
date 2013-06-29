@@ -30,10 +30,13 @@ function makeRaces(drivers) {
 
 var roundName = raceDefinitionFile ? raceDefinitionFile.replace(/.*?([^\/.]+)[^\/]*$/, "$1") : 'test';
 var statisticsFileName = roundName + '-results.xls';
+var logFileName = roundName + '-log.json';
 var races = JSON.parse(fs.readFileSync(raceDefinitionFile));
 var race = null;
 
-function logLap(track) {
+var logStream = fs.createWriteStream(logFileName, { flags: 'a' });
+function log(message) {
+    logStream.write((new Date).toString() + ' ' + JSON.stringify(message) + "\n");
 }
 
 var timeRemaining = 0;
@@ -58,11 +61,13 @@ function processByte(byte) {
         }
         timeRemaining--;
         if (timeRemaining == 0) {
-            timeMessage.lap = ++race.laps[timeMessage.track];
-            if (!time.match(/>>/)) {                        // first lap has no time
-                timeMessage.time = parseFloat(time);
+            if (race) {
+                timeMessage.lap = ++race.laps[timeMessage.track];
+                if (!time.match(/>>/)) {                        // first lap has no time
+                    timeMessage.time = parseFloat(time);
+                }
+                processDS030Message(timeMessage);
             }
-            processDS030Message(timeMessage);
             timeMessage = { type: 'lap' };
         }
     } else {
@@ -184,17 +189,25 @@ io.sockets.on('connection', function (socket) {
 });
 
 function processDS030Message(message) {
+    if (!race && message.type != 'ready') {
+        return;
+    }
     if (race && message.type != 'lap') {
         race.lastMessage = message;
     }
     switch (message.type) {
     case 'ready':
         if (!race || !race.paused) {
+            if (!races.length) {
+                race = undefined;
+                return;
+            }
             race = races[0];
             race.laps = [0, 0, 0, 0];
             races.shift();
         }
         clients.forEach(sendRaceStatus);
+        log({ beginRace: race });
         break;
     case 'lap':
         var track = race.tracks[message.track];
@@ -202,9 +215,6 @@ function processDS030Message(message) {
         track.lastLap = message.time;
         if (!track.bestLap || message.isBestLap) {
             track.bestLap = message.time;
-        }
-        if (race.running) {
-            logLap(track);
         }
         break;
     case 'pause':
@@ -223,6 +233,7 @@ function processDS030Message(message) {
     clients.forEach(function (socket) {
         socket.emit('message', message);
     });
+    log(message);
 }
 
 app.get('/', function (req, res) {

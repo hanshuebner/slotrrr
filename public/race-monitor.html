@@ -16,14 +16,14 @@
         <button type="button" class="btn" value="tracks">Spuren</button>
       </div>
     </div>
-    <div class="card race-status race-status-{{raceStatus}}"><div>{{raceStatusText}}</div></div>
+    <div class="card race-status race-status-{{raceStatus}}" ng-cloak><div>{{raceStatusText}}</div></div>
     <div class="main">
       <track-status ng-repeat="track in race.tracks" track="track"/>
     </div>
     <div class="card next-race">
       <div>Nächste Rennen:</div>
       <div>
-        <ul ng-repeat="race in nextRaces">
+        <ul ng-repeat="race in nextRaces" ng-cloak>
           <li class="next-race-driver" ng-repeat="track in race.tracks">{{track.driverName}}</li>
         </ul>
       </div>
