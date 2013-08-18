@@ -1,5 +1,8 @@
 ;; -*- Lisp -*-
 
+;; tabelle:
+;; create table laps (round varchar, race varchar, clock timestamp, driver varchar, track integer, lap integer, time float);
+
 (defpackage :load-race-log
   (:use :cl))
 
