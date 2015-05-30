@@ -7,11 +7,10 @@
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-        "serialport2": "*",
-        "socket.io": "*",
-        "express": "*",
-        "express-notemplate": "*",
-        "pg": "*"
+        "serialport2": "0.0.5",
+        "socket.io": "0.9.16",
+        "express": "3.2.6",
+        "pg": "1.3.0"
     },
     "repository": {
         "type": "git",

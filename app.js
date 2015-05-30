@@ -4,7 +4,6 @@ var events = require('events');
 var util = require('util');
 var http = require('http');
 var express = require('express');
-var notemplate = require('express-notemplate');
 var pg = require('pg');
 var child_process = require('child_process');
 
@@ -159,7 +158,6 @@ app.configure(function() {
     app.use(express.session());
     app.use(app.router);
     app.set('statics', process.cwd() + '/public');
-    app.engine('html', notemplate.__express);
     app.set('view engine', 'html');
     app.use(express.static(app.get('statics')));
 });
