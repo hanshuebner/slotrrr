@@ -1,6 +1,6 @@
 \set echo all
 -- <h1>Anzahl gewonnene Rennen</h1><br>
-select driver, count(*) from laps where lap = 15 group by driver order by count(*) desc;
+select driver, count(*) from laps where lap = 10 group by driver order by count(*) desc;
 -- <h1>Anzahl gefahrene Runden</h1><br>
 select driver, count(*) from laps group by driver order by count(*) desc;
 -- <h1>Schnellste Runden je Track</h1><br>
