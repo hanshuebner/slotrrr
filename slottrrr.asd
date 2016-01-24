@@ -4,5 +4,6 @@
   :depends-on (:cl-ppcre
                :yason
                :cl-postgres+local-time
-               :postmodern)
+               :postmodern
+               :xhtmlgen)
   :components ((:file "load-race-log")))
