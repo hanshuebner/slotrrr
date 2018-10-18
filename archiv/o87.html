@@ -1,0 +1,170 @@
+<h1>Anzahl gewonnene Rennen pro Fahrer</h1><br>
+with winners as (select distinct on (race::integer) driver from laps where lap = 10 order by race::integer, clock)
+select driver, count(*) from winners group by 1 order by 2 desc;
+<table border="1">
+  <tr>
+    <th align="center">driver</th>
+    <th align="center">count</th>
+  </tr>
+  <tr valign="top">
+    <td align="left">hans</td>
+    <td align="right">8</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">michel</td>
+    <td align="right">4</td>
+  </tr>
+</table>
+<p>(2 rows)<br />
+</p>
+<h1>Anzahl gewonnene Rennen pro Spur</h1><br>
+with winners as (select distinct on (race::integer) track from laps where lap = 10 order by race::integer, clock)
+select track, count(*) from winners group by 1 order by 1;
+<table border="1">
+  <tr>
+    <th align="center">track</th>
+    <th align="center">count</th>
+  </tr>
+  <tr valign="top">
+    <td align="right">0</td>
+    <td align="right">2</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">1</td>
+    <td align="right">6</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">3</td>
+    <td align="right">4</td>
+  </tr>
+</table>
+<p>(3 rows)<br />
+</p>
+<h1>Anzahl gefahrene Runden</h1><br>
+select driver, count(*) from laps group by driver order by count(*) desc;
+<table border="1">
+  <tr>
+    <th align="center">driver</th>
+    <th align="center">count</th>
+  </tr>
+  <tr valign="top">
+    <td align="left">hans</td>
+    <td align="right">108</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">michel</td>
+    <td align="right">107</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">sven</td>
+    <td align="right">93</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">max</td>
+    <td align="right">1</td>
+  </tr>
+</table>
+<p>(4 rows)<br />
+</p>
+<h1>Schnellste Runden je Track</h1><br>
+select distinct on(track) track, driver, time from laps where time > 9 order by track, time asc;
+<table border="1">
+  <tr>
+    <th align="center">track</th>
+    <th align="center">driver</th>
+    <th align="center">time</th>
+  </tr>
+  <tr valign="top">
+    <td align="right">0</td>
+    <td align="left">hans</td>
+    <td align="right">16.0798</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">1</td>
+    <td align="left">michel</td>
+    <td align="right">15.7918</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">2</td>
+    <td align="left">hans</td>
+    <td align="right">17.4917</td>
+  </tr>
+  <tr valign="top">
+    <td align="right">3</td>
+    <td align="left">michel</td>
+    <td align="right">15.6215</td>
+  </tr>
+</table>
+<p>(4 rows)<br />
+</p>
+<h1>Schnellste Runde je Track für alle Fahrer</h1><br>
+select distinct on(driver, track) driver, track, time from laps where time > 9 order by driver, track, time asc;
+<table border="1">
+  <tr>
+    <th align="center">driver</th>
+    <th align="center">track</th>
+    <th align="center">time</th>
+  </tr>
+  <tr valign="top">
+    <td align="left">hans</td>
+    <td align="right">0</td>
+    <td align="right">16.0798</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">hans</td>
+    <td align="right">1</td>
+    <td align="right">15.8052</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">hans</td>
+    <td align="right">2</td>
+    <td align="right">17.4917</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">hans</td>
+    <td align="right">3</td>
+    <td align="right">15.7855</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">michel</td>
+    <td align="right">0</td>
+    <td align="right">16.4572</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">michel</td>
+    <td align="right">1</td>
+    <td align="right">15.7918</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">michel</td>
+    <td align="right">2</td>
+    <td align="right">17.8515</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">michel</td>
+    <td align="right">3</td>
+    <td align="right">15.6215</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">sven</td>
+    <td align="right">0</td>
+    <td align="right">16.9318</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">sven</td>
+    <td align="right">1</td>
+    <td align="right">16.2045</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">sven</td>
+    <td align="right">2</td>
+    <td align="right">19.1734</td>
+  </tr>
+  <tr valign="top">
+    <td align="left">sven</td>
+    <td align="right">3</td>
+    <td align="right">16.0329</td>
+  </tr>
+</table>
+<p>(12 rows)<br />
+</p>
